@@ -1,0 +1,634 @@
+% --- LaTeX Homework Template - S. Venkatraman ---
+
+% --- Set document class and font size ---
+
+\documentclass[letterpaper, 11pt]{article}
+
+% --- Package imports ---
+
+\usepackage{
+  amsmath, amsthm, amssymb, mathtools, dsfont,	  % Math typesetting
+  graphicx, wrapfig, subfig, float,                  % Figures and graphics formatting
+  listings, color, inconsolata, pythonhighlight,     % Code formatting
+  fancyhdr, sectsty, hyperref, enumerate, enumitem } % Headers/footers, section fonts, links, lists
+
+% --- Page layout settings ---
+
+% Set page margins
+\usepackage[left=1.35in, right=1.35in, bottom=1in, top=1.1in, headsep=0.2in]{geometry}
+
+% Anchor footnotes to the bottom of the page
+\usepackage[bottom]{footmisc}
+
+% Set line spacing
+\renewcommand{\baselinestretch}{1.2}
+
+% Set spacing between paragraphs
+\setlength{\parskip}{1.5mm}
+
+% Allow multi-line equations to break onto the next page
+\allowdisplaybreaks
+
+% Enumerated lists: make numbers flush left, with parentheses around them
+\setlist[enumerate]{wide=0pt, leftmargin=21pt, labelwidth=0pt, align=left}
+\setenumerate[1]{label={(\arabic*)}}
+
+% --- Page formatting settings ---
+
+% Set link colors for labeled items (blue) and citations (red)
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=red}
+
+% Make reference section title font smaller
+\renewcommand{\refname}{\large\bf{References}}
+
+% --- Settings for printing computer code ---
+
+% Define colors for green text (comments), grey text (line numbers),
+% and green frame around code
+\definecolor{greenText}{rgb}{0.5, 0.7, 0.5}
+\definecolor{greyText}{rgb}{0.5, 0.5, 0.5}
+\definecolor{codeFrame}{rgb}{0.5, 0.7, 0.5}
+
+% Define code settings
+\lstdefinestyle{code} {
+  frame=single, rulecolor=\color{codeFrame},            % Include a green frame around the code
+  numbers=left,                                         % Include line numbers
+  numbersep=8pt,                                        % Add space between line numbers and frame
+  numberstyle=\tiny\color{greyText},                    % Line number font size (tiny) and color (grey)
+  commentstyle=\color{greenText},                       % Put comments in green text
+  basicstyle=\linespread{1.1}\ttfamily\footnotesize,    % Set code line spacing
+  keywordstyle=\ttfamily\footnotesize,                  % No special formatting for keywords
+  showstringspaces=false,                               % No marks for spaces
+  xleftmargin=1.95em,                                   % Align code frame with main text
+  framexleftmargin=1.6em,                               % Extend frame left margin to include line numbers
+  breaklines=true,                                      % Wrap long lines of code
+  postbreak=\mbox{\textcolor{greenText}{$\hookrightarrow$}\space} % Mark wrapped lines with an arrow
+}
+
+% Set all code listings to be styled with the above settings
+\lstset{style=code}
+
+% --- Math/Statistics commands ---
+
+% Add a reference number to a single line of a multi-line equation
+% Usage: "\numberthis\label{labelNameHere}" in an align or gather environment
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+% Shortcut for bold text in math mode, e.g. $\b{X}$
+\let\b\mathbf
+
+% Shortcut for bold Greek letters, e.g. $\bg{\beta}$
+\let\bg\boldsymbol
+
+% Shortcut for calligraphic script, e.g. %\mc{M}$
+\let\mc\mathcal
+
+% \mathscr{(letter here)} is sometimes used to denote vector spaces
+\usepackage[mathscr]{euscript}
+
+% Convergence: right arrow with optional text on top
+% E.g. $\converge[w]$ for weak convergence
+\newcommand{\converge}[1][]{\xrightarrow{#1}}
+
+% Normal distribution: arguments are the mean and variance
+% E.g. $\normal{\mu}{\sigma}$
+\newcommand{\normal}[2]{\mathcal{N}\left(#1,#2\right)}
+
+% Uniform distribution: arguments are the left and right endpoints
+% E.g. $\unif{0}{1}$
+\newcommand{\unif}[2]{\text{Uniform}(#1,#2)}
+
+% Independent and identically distributed random variables
+% E.g. $ X_1,...,X_n \iid \normal{0}{1}$
+\newcommand{\iid}{\stackrel{\smash{\text{iid}}}{\sim}}
+
+% Equality: equals sign with optional text on top
+% E.g. $X \equals[d] Y$ for equality in distribution
+\newcommand{\equals}[1][]{\stackrel{\smash{#1}}{=}}
+
+% Math mode symbols for common sets and spaces. Example usage: $\R$
+\newcommand{\R}{\mathbb{R}}   % Real numbers
+\newcommand{\C}{\mathbb{C}}   % Complex numbers
+\newcommand{\Q}{\mathbb{Q}}   % Rational numbers
+\newcommand{\Z}{\mathbb{Z}}   % Integers
+\newcommand{\N}{\mathbb{N}}   % Natural numbers
+\newcommand{\F}{\mathcal{F}}  % Calligraphic F for a sigma algebra
+\newcommand{\El}{\mathcal{L}} % Calligraphic L, e.g. for L^p spaces
+
+% Math mode symbols for probability
+\newcommand{\pr}{\mathbb{P}}    % Probability measure
+\newcommand{\E}{\mathbb{E}}     % Expectation, e.g. $\E(X)$
+\newcommand{\var}{\text{Var}}   % Variance, e.g. $\var(X)$
+\newcommand{\cov}{\text{Cov}}   % Covariance, e.g. $\cov(X,Y)$
+\newcommand{\corr}{\text{Corr}} % Correlation, e.g. $\corr(X,Y)$
+\newcommand{\B}{\mathcal{B}}    % Borel sigma-algebra
+
+% Other miscellaneous symbols
+\newcommand{\tth}{\text{th}}	% Non-italicized 'th', e.g. $n^\tth$
+\newcommand{\Oh}{\mathcal{O}}	% Big-O notation, e.g. $\O(n)$
+\newcommand{\1}{\mathds{1}}	% Indicator function, e.g. $\1_A$
+
+% Additional commands for math mode
+\DeclareMathOperator*{\argmax}{argmax}    % Argmax, e.g. $\argmax_{x\in[0,1]} f(x)$
+\DeclareMathOperator*{\argmin}{argmin}    % Argmin, e.g. $\argmin_{x\in[0,1]} f(x)$
+\DeclareMathOperator*{\spann}{Span}       % Span, e.g. $\spann\{X_1,...,X_n\}$
+\DeclareMathOperator*{\bias}{Bias}        % Bias, e.g. $\bias(\hat\theta)$
+\DeclareMathOperator*{\ran}{ran}          % Range of an operator, e.g. $\ran(T) 
+\DeclareMathOperator*{\dv}{d\!}           % Non-italicized 'with respect to', e.g. $\int f(x) \dv x$
+\DeclareMathOperator*{\diag}{diag}        % Diagonal of a matrix, e.g. $\diag(M)$
+\DeclareMathOperator*{\trace}{trace}      % Trace of a matrix, e.g. $\trace(M)$
+
+% Numbered theorem, lemma, etc. settings - e.g., a definition, lemma, and theorem appearing in that 
+% order in Section 2 will be numbered Definition 2.1, Lemma 2.2, Theorem 2.3. 
+% Example usage: \begin{theorem}[Name of theorem] Theorem statement \end{theorem}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+% Un-numbered theorem, lemma, etc. settings
+% Example usage: \begin{lemma*}[Name of lemma] Lemma statement \end{lemma*}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem*{proposition*}{Proposition}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem*{corollary*}{Corollary}
+\newtheorem*{definition*}{Definition}
+\newtheorem*{example*}{Example}
+\newtheorem*{remark*}{Remark}
+\newtheorem*{claim}{Claim}
+
+% --- Left/right header text (to appear on every page) ---
+
+% Include a line underneath the header, no footer line
+\pagestyle{fancy}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Left header text: course name/assignment number
+\lhead{MATH-SHU 238 (HTOP) -- Homework 4}
+
+% Right header text: your name
+\rhead{Yixia Yu (yy5091@nyu.edu)}
+
+% --- Document starts here ---
+
+\begin{document}
+\subsection*{Problem 1}
+Uniform distribution. A random variable that is equally likely to take any value in a finite set $S$ is said to have the uniform distribution on $S$. If $U$ is such a random variable and $\emptyset \neq R \subseteq S$, show that the distribution of $U$ conditional on $\{U \in R\}$ is uniform on $R$.
+\begin{proof}
+    Since $U$ is uniformly distributed on set $S$, for any $s \in S$, we have:
+\[ P(U = s) = \frac{1}{|S|} \]
+
+For any element $r \in R$, we need to compute the conditional probability $P(U = r \mid U \in R)$.
+
+By the definition of conditional probability:
+\[ P(U = r \mid U \in R) = \frac{P(U = r \text{ and } U \in R)}{P(U \in R)} \]
+
+Since $r \in R$, the event $\{U = r \text{ and } U \in R\}$ is equivalent to $\{U = r\}$. Therefore:
+\[ P(U = r \mid U \in R) = \frac{P(U = r)}{P(U \in R)} \]
+
+We know that $P(U = r) = \frac{1}{|S|}$.
+
+For $P(U \in R)$, we use the fact that $U$ has a uniform distribution on $S$:
+\[ P(U \in R) = \sum_{t \in R} P(U = t) = \sum_{t \in R} \frac{1}{|S|} = \frac{|R|}{|S|} \]
+
+Substituting these values:
+\[ P(U = r \mid U \in R) = \frac{\frac{1}{|S|}}{\frac{|R|}{|S|}} = \frac{1}{|R|} \]
+
+Since this probability equals $\frac{1}{|R|}$ for every $r \in R$, the conditional distribution assigns equal probability to all elements in $R$. This is precisely the definition of a uniform distribution on $R$.
+
+Therefore, the distribution of $U$ conditional on $\{U \in R\}$ is uniform on $R$.
+\end{proof}
+\subsection*{Problem 2}
+\begin{align*}
+    & 3.\quad\mathrm{Let~}X\text{ be a random variable with distribution function} \\
+    & \mathbb{P}\{X\leq x\}=\left\{
+   \begin{array}
+   {ll}0 & \mathrm{if~}x\leq0, \\
+   x & \mathrm{if~}0<x\leq1, \\
+   1 & \mathrm{if~}x>1.
+   \end{array}\right. \\
+    & \mathrm{Let~}F\text{ be a distribution function which is continuous and strictly increasing. Show that }Y=F^{-1}(X) \\
+    & \text{is a random variable having distribution function }F.\\
+    & \text{ Is it necessary that }F\text{ be continuous and/or strictly}\text{ increasing?}
+   \end{align*}
+   \begin{proof}
+    We need to show that if $X$ has the given distribution function and $F$ is continuous and strictly increasing, then $Y = F^{-1}(X)$ has distribution function $F$.
+
+    For any real number $y$, we have:
+    \begin{align*}
+    \mathbb{P}\{Y \leq y\} &= \mathbb{P}\{F^{-1}(X) \leq y\} \\
+    &= \mathbb{P}\{X \leq F(y)\}
+    \end{align*}
+    
+    This equivalence holds because $F$ is strictly increasing, so the inequality is preserved when applying $F$ to both sides.
+    
+    Since $X$ has the distribution function:
+    \begin{align*}
+    \mathbb{P}\{X \leq x\} = 
+    \begin{cases}
+    0 & \text{if } x \leq 0 \\
+    x & \text{if } 0 < x \leq 1 \\
+    1 & \text{if } x > 1
+    \end{cases}
+    \end{align*}
+    
+    Therefore:
+    \begin{align*}
+    \mathbb{P}\{X \leq F(y)\} = 
+    \begin{cases}
+    0 & \text{if } F(y) \leq 0 \\
+    F(y) & \text{if } 0 < F(y) \leq 1 \\
+    1 & \text{if } F(y) > 1
+    \end{cases}
+    \end{align*}
+    
+    Since $F$ is a distribution function, we know $0 \leq F(y) \leq 1$ for all $y$, which means we're always in the middle case where $\mathbb{P}\{X \leq F(y)\} = F(y)$. Thus, $\mathbb{P}\{Y \leq y\} = F(y)$, which proves that $Y$ has distribution function $F$.
+    
+    Regarding the necessity of the conditions:
+    
+    \textbf{Strict monotonicity:} If $F$ is not strictly increasing but merely non-decreasing, then for some values $a < b$ with $F(a) = F(b)$, the inverse function $F^{-1}$ is not uniquely defined at $F(a)$. This makes $Y = F^{-1}(X)$ ambiguous.
+    
+    \textbf{Continuity:} If $F$ has jump discontinuities, then there exist values $c$ in the range of $F$ for which $F^{-1}(c)$ is not defined. If $X$ takes such values with positive probability, then $Y = F^{-1}(X)$ is not properly defined as a random variable.
+    
+    Both issues can be addressed by using the generalized inverse function:
+    \[ F^{-1}(u) = \inf\{y: F(y) \geq u\} \]
+    
+    With this definition, $Y = F^{-1}(X)$ will have distribution function $F$ even when $F$ is not continuous or strictly increasing, provided that $F$ is at least right-continuous and non-decreasing.
+   \end{proof}
+\subsection*{Problem 3}
+(a) Show that any discrete random variable may be written as a linear combination of indicator variables.
+\\(b) Show that any random variable may be expressed as the limit of an increasing sequence of discrete random variables.
+\\(c) Show that the limit of any increasing convergent sequence of random variables is a random variable.
+\begin{proof}
+    \textbf{(a)}
+
+Let $X$ be a discrete random variable taking values in the countable set $\{x_1, x_2, x_3, \ldots\}$. We can express $X$ as:
+\begin{align*}
+X = \sum_{i=1}^{\infty} x_i \mathbf{1}_{\{X = x_i\}}
+\end{align*}
+
+where $\mathbf{1}_{\{X = x_i\}}$ is the indicator variable for the event $\{X = x_i\}$, defined as:
+\begin{align*}
+\mathbf{1}_{\{X = x_i\}}(\omega) = 
+\begin{cases}
+1 & \text{if } X(\omega) = x_i \\
+0 & \text{otherwise}
+\end{cases}
+\end{align*}
+
+To verify this representation, consider any outcome $\omega$ in the sample space. If $X(\omega) = x_j$ for some $j$, then $\mathbf{1}_{\{X = x_i\}}(\omega) = 0$ for all $i \neq j$ and $\mathbf{1}_{\{X = x_j\}}(\omega) = 1$. Therefore:
+\begin{align*}
+\sum_{i=1}^{\infty} x_i \mathbf{1}_{\{X = x_i\}}(\omega) = x_j \cdot 1 + \sum_{i \neq j} x_i \cdot 0 = x_j = X(\omega)
+\end{align*}
+
+Thus, $X$ is indeed a linear combination of indicator variables.
+
+\textbf{(b)}
+
+Let $X$ be any random variable. For each positive integer $m$, we partition the real line into intervals of the form $[k2^{-m}, (k+1)2^{-m})$ for $k \in \mathbb{Z}$ (i.e., all integers from $-\infty$ to $\infty$).
+
+We define the discrete random variable $X_m$ as:
+\begin{align*}
+X_m = \sum_{k=-\infty}^{\infty} k2^{-m} I_{k,m}
+\end{align*}
+
+where $I_{k,m}$ is the indicator function of the event $\{k2^{-m} \leq X < (k+1)2^{-m}\}$.
+
+This construction has the following properties:
+
+1. $X_m$ is a discrete random variable because it takes values in the countable set $\{k2^{-m}: k \in \mathbb{Z}\}$.
+
+2. For any outcome $\omega$, if $X(\omega) \in [k2^{-m}, (k+1)2^{-m})$ for some integer $k$, then $X_m(\omega) = k2^{-m}$, which is the left endpoint of the interval containing $X(\omega)$.
+
+3. For each fixed $\omega$, $X_m(\omega) \leq X(\omega)$ since $X_m(\omega) = k2^{-m}$ when $X(\omega) \in [k2^{-m}, (k+1)2^{-m})$.
+
+4. As $m$ increases, the partition becomes finer and $X_m(\omega)$ becomes a better approximation of $X(\omega)$. Specifically, if $X(\omega) \in [k2^{-m}, (k+1)2^{-m})$, then:
+\begin{align*}
+0 \leq X(\omega) - X_m(\omega) < (k+1)2^{-m} - k2^{-m} = 2^{-m}
+\end{align*}
+
+5. The sequence $\{X_m(\omega)\}_{m=1}^{\infty}$ is increasing for each fixed $\omega$. This is because as $m$ increases, the left endpoints of the intervals in the partition either stay the same or increase to a value closer to $X(\omega)$.
+
+Since $2^{-m} \to 0$ as $m \to \infty$, we have $X_m(\omega) \uparrow X(\omega)$ as $m \to \infty$ for all $\omega$.
+
+Therefore, any random variable $X$ can be expressed as the limit of an increasing sequence of discrete random variables $\{X_m\}_{m=1}^{\infty}$.
+
+\textbf{(c)}
+
+Let $\{Y_n\}$ be an increasing sequence of random variables converging to $Y$. We need to show that $Y$ is a random variable, which means we need to prove that for any Borel set $B$, the preimage $Y^{-1}(B) = \{\omega: Y(\omega) \in B\}$ is measurable.
+
+Consider any $a \in \mathbb{R}$. We need to show that the set $\{\omega: Y(\omega) \leq a\}$ is measurable.
+
+Since $\{Y_n\}$ is increasing and converges to $Y$, we have:
+\begin{align*}
+\{\omega: Y(\omega) \leq a\} = \{\omega: \lim_{n \to \infty} Y_n(\omega) \leq a\}
+\end{align*}
+
+For an increasing sequence, $\lim_{n \to \infty} Y_n(\omega) \leq a$ if and only if $Y_n(\omega) \leq a$ for all $n$. Therefore:
+\begin{align*}
+\{\omega: Y(\omega) \leq a\} = \bigcap_{n=1}^{\infty} \{\omega: Y_n(\omega) \leq a\}
+\end{align*}
+
+Since each $Y_n$ is a random variable, each set $\{\omega: Y_n(\omega) \leq a\}$ is measurable. The countable intersection of measurable sets is measurable, so $\{\omega: Y(\omega) \leq a\}$ is measurable.
+
+Since the preimage of any interval $(-\infty, a]$ under $Y$ is measurable, and the Borel $\sigma$-algebra is generated by such intervals, $Y$ is a random variable.
+    \end{proof}
+\subsection*{Problem 4}
+Express the distribution functions of
+
+$$X^{+} = \max\{0, X\}, \quad X^{-} = -\min\{0, X\}, \quad |X| = X^{+} + X^{-}, \quad -X,$$
+
+in terms of the distribution function $F$ of the random variable $X$.
+\begin{proof}
+    Let $X$ be a random variable with distribution function $F(x) = \mathbb{P}(X \leq x)$. We'll express the distribution functions of the derived random variables in terms of $F$.
+
+\textbf{Distribution function of $X^+ = \max\{0, X\}$:}
+
+For $x < 0$, since $\max\{0, X\} \geq 0 > x$ for all values of $X$:
+\begin{align*}
+\mathbb{P}(X^+ \leq x) = 0
+\end{align*}
+
+For $x \geq 0$:
+\begin{align*}
+\mathbb{P}(X^+ \leq x) &= \mathbb{P}(\max\{0, X\} \leq x)\\
+&= \mathbb{P}(X \leq x)\\
+&= F(x)
+\end{align*}
+
+Therefore:
+\begin{align*}
+\mathbb{P}(X^+ \leq x) = 
+\begin{cases}
+0 & \text{if } x < 0,\\
+F(x) & \text{if } x \geq 0.
+\end{cases}
+\end{align*}
+
+\textbf{Distribution function of $X^- = -\min\{0, X\}$:}
+
+For $x < 0$, since $X^- \geq 0$ by definition:
+\begin{align*}
+\mathbb{P}(X^- \leq x) = 0
+\end{align*}
+
+For $x \geq 0$, noting that $X^- = 0$ when $X \geq 0$ and $X^- = -X$ when $X < 0$:
+\begin{align*}
+\mathbb{P}(X^- \leq x) &= \mathbb{P}((X \geq 0) \cup (X < 0 \text{ and } -X \leq x))\\
+&= \mathbb{P}(X \geq 0) + \mathbb{P}(-x \leq X < 0)\\
+&= 1 - \lim_{y \uparrow 0} F(y) + F(0) - F(-x)\\
+&= 1 - \lim_{y \uparrow -x} F(y)
+\end{align*}
+
+Therefore:
+\begin{align*}
+\mathbb{P}(X^- \leq x) = 
+\begin{cases}
+0 & \text{if } x < 0,\\
+1 - \lim_{y \uparrow -x} F(y) & \text{if } x \geq 0.
+\end{cases}
+\end{align*}
+
+\textbf{Distribution function of $|X| = X^+ + X^-$:}
+
+For $x < 0$, since $|X| \geq 0$:
+\begin{align*}
+\mathbb{P}(|X| \leq x) = 0
+\end{align*}
+
+For $x \geq 0$, using $|X| = X$ when $X \geq 0$ and $|X| = -X$ when $X < 0$:
+\begin{align*}
+\mathbb{P}(|X| \leq x) &= \mathbb{P}(0 \leq X \leq x) + \mathbb{P}(-x \leq X < 0)\\
+&= F(x) - F(0) + F(0) - F(-x)\\
+&= F(x) - \lim_{y \uparrow -x} F(y)
+\end{align*}
+
+Therefore:
+\begin{align*}
+\mathbb{P}(|X| \leq x) = 
+\begin{cases}
+0 & \text{if } x < 0,\\
+F(x) - \lim_{y \uparrow -x} F(y) & \text{if } x \geq 0.
+\end{cases}
+\end{align*}
+
+\textbf{Distribution function of $-X$:}
+
+For any real $x$:
+\begin{align*}
+\mathbb{P}(-X \leq x) &= \mathbb{P}(X \geq -x)\\
+&= 1 - \mathbb{P}(X < -x)\\
+&= 1 - \lim_{y \uparrow -x} F(y)
+\end{align*}
+    \end{proof}
+\subsection*{Problem 5}
+The real number $m$ is called a median of the distribution function $F$ whenever $\lim_{y \to m} F(y) \leq \frac{1}{2} \leq F(m)$.
+
+(a) Show that every distribution function $F$ has at least one median, and that the set of medians of $F$ is a closed interval of $\mathbb{R}$.
+
+(b) Show, if $F$ is continuous, that $F(m)=\frac{1}{2}$ for any median $m$.
+\begin{proof}
+    \textbf{(a)}
+
+Define $m = \sup\{x : F(x) < \frac{1}{2}\}$. We will show that $m$ is a median.
+
+For any $y < m$, by the definition of supremum, we have $F(y) < \frac{1}{2}$. This implies that $\lim_{y \uparrow m} F(y) \leq \frac{1}{2}$.
+
+Now we need to show that $F(m) \geq \frac{1}{2}$. Suppose, for contradiction, that $F(m) < \frac{1}{2}$. Since $F$ is right-continuous, there exists some $\delta > 0$ such that $F(m+\epsilon) < \frac{1}{2}$ for all $0 < \epsilon < \delta$. But this means that $m + \frac{\delta}{2}$ belongs to the set $\{x : F(x) < \frac{1}{2}\}$, which contradicts $m$ being the supremum of this set. Therefore, $F(m) \geq \frac{1}{2}$.
+
+Thus, $m$ satisfies $\lim_{y \uparrow m} F(y) \leq \frac{1}{2} \leq F(m)$, making it a median.
+
+Similarly, define $M = \sup\{x : F(x) \leq \frac{1}{2}\}$. Using a similar argument, we can show that $M$ is also a median.
+
+For any $x \in [m, M]$, we have:
+\begin{align*}
+\lim_{y \uparrow x} F(y) \leq \lim_{y \uparrow m} F(y) \leq \frac{1}{2}
+\end{align*}
+because $F$ is non-decreasing. Also:
+\begin{align*}
+F(x) \geq \frac{1}{2}
+\end{align*}
+because $x \geq m$ and $F$ is non-decreasing. Therefore, every $x \in [m, M]$ is a median.
+
+Conversely, if $x < m$, then $F(x) < \frac{1}{2}$, so $x$ cannot be a median. If $x > M$, then by definition of $M$, we have $F(x) > \frac{1}{2}$, and by right-continuity of $F$, we get $\lim_{y \uparrow x} F(y) > \frac{1}{2}$, so $x$ cannot be a median.
+
+Therefore, the set of all medians is exactly the closed interval $[m, M]$.
+
+\textbf{(b)}
+
+Let $m$ be any median of the continuous distribution function $F$. By definition of median:
+\begin{align*}
+\lim_{y \uparrow m} F(y) \leq \frac{1}{2} \leq F(m)
+\end{align*}
+
+Since $F$ is continuous at $m$, we have $\lim_{y \uparrow m} F(y) = F(m)$. The inequality above becomes:
+\begin{align*}
+F(m) \leq \frac{1}{2} \leq F(m)
+\end{align*}
+
+This can only be satisfied when $F(m) = \frac{1}{2}$.
+
+Therefore, when $F$ is continuous, every median $m$ satisfies $F(m) = \frac{1}{2}$.
+    \end{proof}
+\subsection*{Problem 6}
+Let $(\Omega, \mathcal{F})$ be a measurable space, $A_{1}$,$\cdots$$A_{n} \in \mathcal{F}$ and $b_{1}$,$\cdots$$b_{n} \in \mathbb{R}$. Set $X = b_{1}1_{A_{1}} + \cdots + b_{n}1_{A_{n}}$. Suppose that for all $i \neq j$, $A_{i} \cap A_{j} = \emptyset$ and $b_{i} \neq b_{j}$. Show that $\sigma(X) = \sigma(\{A_{1}, \cdots, A_{n}\})$.
+\begin{proof}
+    Let $(\Omega, \mathcal{F})$ be a measurable space, $A_1, \ldots, A_n \in \mathcal{F}$ be disjoint sets and $b_1, \ldots, b_n \in \mathbb{R}$ be distinct real numbers. We define $X = \sum_{i=1}^n b_i 1_{A_i}$.
+
+We want to show that $\sigma(X) = \sigma(\{A_1, \ldots, A_n\})$.
+
+$\Rightarrow \sigma(X) \subseteq \sigma(\{A_1, \ldots, A_n\})$:
+
+For any Borel set $B \in \mathcal{B}(\mathbb{R})$, we need to show that $X^{-1}(B) \in \sigma(\{A_1, \ldots, A_n\})$.
+
+Note that $X$ takes only the values from the set $\{b_1, \ldots, b_n, 0\}$, where $0$ is taken when $\omega \notin \bigcup_{i=1}^n A_i$. Let's define $A_0 = \Omega \setminus \bigcup_{i=1}^n A_i$ and $b_0 = 0$ for convenience.
+
+For any $\omega \in \Omega$, there is a unique index $j \in \{0, 1, \ldots, n\}$ such that $\omega \in A_j$, and thus $X(\omega) = b_j$.
+
+Therefore, 
+\begin{align*}
+X^{-1}(B) &= \{\omega \in \Omega : X(\omega) \in B\} \\
+&= \{\omega \in \Omega : \exists j \in \{0, 1, \ldots, n\} \text{ such that } \omega \in A_j \text{ and } b_j \in B\} \\
+&= \bigcup_{j=0}^n \{A_j : b_j \in B\}
+\end{align*}
+
+Since each $A_j \in \sigma(\{A_1, \ldots, A_n\})$ (note that $A_0$ can be expressed as $\Omega \setminus \bigcup_{i=1}^n A_i$, which is in $\sigma(\{A_1, \ldots, A_n\})$), we have $X^{-1}(B) \in \sigma(\{A_1, \ldots, A_n\})$.
+
+Thus, $\sigma(X) \subseteq \sigma(\{A_1, \ldots, A_n\})$.
+
+$\Leftarrow\sigma(\{A_1, \ldots, A_n\}) \subseteq \sigma(X)$:
+
+We need to show that for each $i \in \{1, \ldots, n\}$, $A_i \in \sigma(X)$.
+
+Since the values $b_1, \ldots, b_n$ are distinct, for each $i \in \{1, \ldots, n\}$, the set $\{b_i\}$ is a Borel set in $\mathbb{R}$. We have:
+\begin{align*}
+X^{-1}(\{b_i\}) &= \{\omega \in \Omega : X(\omega) = b_i\} \\
+&= \{\omega \in \Omega : \sum_{j=1}^n b_j 1_{A_j}(\omega) = b_i\}
+\end{align*}
+
+For any $\omega \in A_i$, we have $X(\omega) = b_i$ because $A_i \cap A_j = \emptyset$ for $i \neq j$. For any $\omega \notin A_i$, we have $X(\omega) \neq b_i$ because the values $b_1, \ldots, b_n$ are distinct and the sets $A_1, \ldots, A_n$ are disjoint.
+
+Therefore, $X^{-1}(\{b_i\}) = A_i$, which implies $A_i \in \sigma(X)$ for each $i \in \{1, \ldots, n\}$.
+
+Hence, $\sigma(\{A_1, \ldots, A_n\}) \subseteq \sigma(X)$.
+
+So we conclude that $\sigma(X) = \sigma(\{A_1, \ldots, A_n\})$.
+    \end{proof}
+\subsection*{Problem 7}
+Consider the random walk on $\{0,1,\cdotp\cdotp\cdotp N\}$ that reflects at 0, introduced in the class. More precisely, let $S_0=k,S_{j+1}=S_j+X_j$, where $X_j=1$ if $S_j=0$, otherwise $\mathbb{P}[X_j=1]=p$ and $\mathbb{P}[X_j=-1]=q.$ Compute the expected number of steps to frst reach state $N$, as a $\tilde{\text{function of }k}.\tilde{\text{ Distinguish the cases }p}=q$ and $p\neq q.$
+\begin{proof}
+    Random walk on $\{0,1,\ldots,N\}$ with:
+\begin{align*}
+\mathbb{P}[X_j = 1 \mid S_j = 0] &= 1 \text{ (reflection at 0)}\\
+\mathbb{P}[X_j = 1 \mid S_j \neq 0] &= p\\
+\mathbb{P}[X_j = -1 \mid S_j \neq 0] &= q = 1-p
+\end{align*}
+
+Let $h_k$ be the expected number of steps to first reach state $N$ from initial state $k$.
+
+\textbf{Recursive equations:}
+\begin{align*}
+h_k &= 1 + ph_{k+1} + qh_{k-1}, \quad 0 < k < N\\
+h_0 &= 1 + h_1\\
+h_N &= 0
+\end{align*}
+
+\textbf{Case 1:  ($p = q = 1/2$)}
+
+For $0 < k < N$, the recursive equation becomes:
+\begin{align*}
+h_k &= 1 + \frac{1}{2}h_{k+1} + \frac{1}{2}h_{k-1}\\
+\Rightarrow h_{k+1} - 2h_k + h_{k-1} &= -2
+\end{align*}
+
+This second-order linear difference equation has general solution:
+\begin{align*}
+h_k = A + Bk + k(N-k)
+\end{align*}
+
+From boundary conditions:
+\begin{align*}
+h_N &= 0 \Rightarrow A + BN = 0\\
+h_0 &= 1 + h_1 \Rightarrow B = -1 \Rightarrow A = N
+\end{align*}
+
+Therefore:
+\begin{align*}
+h_k = (N-k)(k+1)
+\end{align*}
+
+\textbf{Case 2: ($p \neq q$)}
+
+Rearranging the recursive equation:
+\begin{align*}
+ph_{k+1} - h_k + qh_{k-1} = -1
+\end{align*}
+
+Let $\rho = \frac{q}{p}$. The general solution has form:
+\begin{align*}
+h_k = A + B\rho^k + \frac{k}{q-p} + \frac{q}{q-p}
+\end{align*}
+
+Applying boundary conditions:
+\begin{align*}
+h_N &= 0\\
+h_0 &= 1 + h_1
+\end{align*}
+
+Solving for constants $A$ and $B$:
+\begin{align*}
+A &= \frac{1}{p-q}\left(\frac{1-\rho^N}{1-\rho} - N\right)\\
+B &= \frac{1}{p-q} \cdot \frac{1}{1-\rho^N}
+\end{align*}
+
+Final solution when $p \neq q$:
+\begin{align*}
+h_k = \begin{cases}
+\frac{N-k}{p-q} & \text{if } p > q\\
+\frac{1}{p-q}\left[\frac{1-\rho^N}{1-\rho} - N - \frac{\rho^k-\rho^N}{1-\rho^N}\right] & \text{if } p < q
+\end{cases}
+\end{align*}
+    \end{proof}
+\subsection*{Problem 8}
+If $F: \mathbb{R} \to [ 0, 1]$ satisfes monotone increasing, right continuity, $\lim _{x\to - \infty }F( x) = 0$ and $\lim_{x\to+\infty}F(x)=1$, show that $F$ is the distribution function of some random variable on some probability space. (Hint: vou may want to revisit Section 2.3, excercise 3)
+\begin{proof}
+    Let $F: \mathbb{R} \to [0, 1]$ satisfy:
+\begin{itemize}
+    \item Monotone increasing
+    \item Right continuous
+    \item $\lim_{x \to -\infty} F(x) = 0$
+    \item $\lim_{x \to +\infty} F(x) = 1$
+\end{itemize}
+
+We construct a random variable with distribution function $F$ using the hint that the limit of any increasing sequence of random variables is a random variable.
+
+Let $(\Omega, \mathcal{F}, \mathbb{P}) = ((0,1], \mathcal{B}((0,1]), \lambda)$ where $\lambda$ is Lebesgue measure.
+
+For each $n \in \mathbb{N}$, define:
+\begin{align*}
+X_n(\omega) = \inf\{x = k2^{-n} : F(x) \geq \omega, k \in \mathbb{Z}\}
+\end{align*}
+
+The sequence $\{X_n\}$ is decreasing: $X_n(\omega) \geq X_{n+1}(\omega)$ for all $\omega \in \Omega$.
+
+Define $X(\omega) = \lim_{n \to \infty} X_n(\omega)$. By the hint, $X$ is a random variable since it's the limit of a monotone sequence of random variables.
+
+From the construction and right continuity of $F$:
+\begin{align*}
+X(\omega) = \inf\{x \in \mathbb{R} : F(x) \geq \omega\}
+\end{align*}
+
+For any $a \in \mathbb{R}$:
+\begin{align*}
+\mathbb{P}(X \leq a) &= \mathbb{P}(\{\omega \in \Omega : F(a) \geq \omega\}) \\
+&= F(a)
+\end{align*}
+Therefore, $F$ is the distribution function of the random variable $X$.
+    \end{proof}
+
+\end{document}

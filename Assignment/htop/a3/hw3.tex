@@ -1,0 +1,373 @@
+% --- LaTeX Homework Template - S. Venkatraman ---
+
+% --- Set document class and font size ---
+
+\documentclass[letterpaper, 11pt]{article}
+
+% --- Package imports ---
+
+\usepackage{
+  amsmath, amsthm, amssymb, mathtools, dsfont,	  % Math typesetting
+  graphicx, wrapfig, subfig, float,                  % Figures and graphics formatting
+  listings, color, inconsolata, pythonhighlight,     % Code formatting
+  fancyhdr, sectsty, hyperref, enumerate, enumitem } % Headers/footers, section fonts, links, lists
+
+% --- Page layout settings ---
+
+% Set page margins
+\usepackage[left=1.35in, right=1.35in, bottom=1in, top=1.1in, headsep=0.2in]{geometry}
+
+% Anchor footnotes to the bottom of the page
+\usepackage[bottom]{footmisc}
+
+% Set line spacing
+\renewcommand{\baselinestretch}{1.2}
+
+% Set spacing between paragraphs
+\setlength{\parskip}{1.5mm}
+
+% Allow multi-line equations to break onto the next page
+\allowdisplaybreaks
+
+% Enumerated lists: make numbers flush left, with parentheses around them
+\setlist[enumerate]{wide=0pt, leftmargin=21pt, labelwidth=0pt, align=left}
+\setenumerate[1]{label={(\arabic*)}}
+
+% --- Page formatting settings ---
+
+% Set link colors for labeled items (blue) and citations (red)
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=red}
+
+% Make reference section title font smaller
+\renewcommand{\refname}{\large\bf{References}}
+
+% --- Settings for printing computer code ---
+
+% Define colors for green text (comments), grey text (line numbers),
+% and green frame around code
+\definecolor{greenText}{rgb}{0.5, 0.7, 0.5}
+\definecolor{greyText}{rgb}{0.5, 0.5, 0.5}
+\definecolor{codeFrame}{rgb}{0.5, 0.7, 0.5}
+
+% Define code settings
+\lstdefinestyle{code} {
+  frame=single, rulecolor=\color{codeFrame},            % Include a green frame around the code
+  numbers=left,                                         % Include line numbers
+  numbersep=8pt,                                        % Add space between line numbers and frame
+  numberstyle=\tiny\color{greyText},                    % Line number font size (tiny) and color (grey)
+  commentstyle=\color{greenText},                       % Put comments in green text
+  basicstyle=\linespread{1.1}\ttfamily\footnotesize,    % Set code line spacing
+  keywordstyle=\ttfamily\footnotesize,                  % No special formatting for keywords
+  showstringspaces=false,                               % No marks for spaces
+  xleftmargin=1.95em,                                   % Align code frame with main text
+  framexleftmargin=1.6em,                               % Extend frame left margin to include line numbers
+  breaklines=true,                                      % Wrap long lines of code
+  postbreak=\mbox{\textcolor{greenText}{$\hookrightarrow$}\space} % Mark wrapped lines with an arrow
+}
+
+% Set all code listings to be styled with the above settings
+\lstset{style=code}
+
+% --- Math/Statistics commands ---
+
+% Add a reference number to a single line of a multi-line equation
+% Usage: "\numberthis\label{labelNameHere}" in an align or gather environment
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+% Shortcut for bold text in math mode, e.g. $\b{X}$
+\let\b\mathbf
+
+% Shortcut for bold Greek letters, e.g. $\bg{\beta}$
+\let\bg\boldsymbol
+
+% Shortcut for calligraphic script, e.g. %\mc{M}$
+\let\mc\mathcal
+
+% \mathscr{(letter here)} is sometimes used to denote vector spaces
+\usepackage[mathscr]{euscript}
+
+% Convergence: right arrow with optional text on top
+% E.g. $\converge[w]$ for weak convergence
+\newcommand{\converge}[1][]{\xrightarrow{#1}}
+
+% Normal distribution: arguments are the mean and variance
+% E.g. $\normal{\mu}{\sigma}$
+\newcommand{\normal}[2]{\mathcal{N}\left(#1,#2\right)}
+
+% Uniform distribution: arguments are the left and right endpoints
+% E.g. $\unif{0}{1}$
+\newcommand{\unif}[2]{\text{Uniform}(#1,#2)}
+
+% Independent and identically distributed random variables
+% E.g. $ X_1,...,X_n \iid \normal{0}{1}$
+\newcommand{\iid}{\stackrel{\smash{\text{iid}}}{\sim}}
+
+% Equality: equals sign with optional text on top
+% E.g. $X \equals[d] Y$ for equality in distribution
+\newcommand{\equals}[1][]{\stackrel{\smash{#1}}{=}}
+
+% Math mode symbols for common sets and spaces. Example usage: $\R$
+\newcommand{\R}{\mathbb{R}}   % Real numbers
+\newcommand{\C}{\mathbb{C}}   % Complex numbers
+\newcommand{\Q}{\mathbb{Q}}   % Rational numbers
+\newcommand{\Z}{\mathbb{Z}}   % Integers
+\newcommand{\N}{\mathbb{N}}   % Natural numbers
+\newcommand{\F}{\mathcal{F}}  % Calligraphic F for a sigma algebra
+\newcommand{\El}{\mathcal{L}} % Calligraphic L, e.g. for L^p spaces
+
+% Math mode symbols for probability
+\newcommand{\pr}{\mathbb{P}}    % Probability measure
+\newcommand{\E}{\mathbb{E}}     % Expectation, e.g. $\E(X)$
+\newcommand{\var}{\text{Var}}   % Variance, e.g. $\var(X)$
+\newcommand{\cov}{\text{Cov}}   % Covariance, e.g. $\cov(X,Y)$
+\newcommand{\corr}{\text{Corr}} % Correlation, e.g. $\corr(X,Y)$
+\newcommand{\B}{\mathcal{B}}    % Borel sigma-algebra
+
+% Other miscellaneous symbols
+\newcommand{\tth}{\text{th}}	% Non-italicized 'th', e.g. $n^\tth$
+\newcommand{\Oh}{\mathcal{O}}	% Big-O notation, e.g. $\O(n)$
+\newcommand{\1}{\mathds{1}}	% Indicator function, e.g. $\1_A$
+
+% Additional commands for math mode
+\DeclareMathOperator*{\argmax}{argmax}    % Argmax, e.g. $\argmax_{x\in[0,1]} f(x)$
+\DeclareMathOperator*{\argmin}{argmin}    % Argmin, e.g. $\argmin_{x\in[0,1]} f(x)$
+\DeclareMathOperator*{\spann}{Span}       % Span, e.g. $\spann\{X_1,...,X_n\}$
+\DeclareMathOperator*{\bias}{Bias}        % Bias, e.g. $\bias(\hat\theta)$
+\DeclareMathOperator*{\ran}{ran}          % Range of an operator, e.g. $\ran(T) 
+\DeclareMathOperator*{\dv}{d\!}           % Non-italicized 'with respect to', e.g. $\int f(x) \dv x$
+\DeclareMathOperator*{\diag}{diag}        % Diagonal of a matrix, e.g. $\diag(M)$
+\DeclareMathOperator*{\trace}{trace}      % Trace of a matrix, e.g. $\trace(M)$
+
+% Numbered theorem, lemma, etc. settings - e.g., a definition, lemma, and theorem appearing in that 
+% order in Section 2 will be numbered Definition 2.1, Lemma 2.2, Theorem 2.3. 
+% Example usage: \begin{theorem}[Name of theorem] Theorem statement \end{theorem}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+% Un-numbered theorem, lemma, etc. settings
+% Example usage: \begin{lemma*}[Name of lemma] Lemma statement \end{lemma*}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem*{proposition*}{Proposition}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem*{corollary*}{Corollary}
+\newtheorem*{definition*}{Definition}
+\newtheorem*{example*}{Example}
+\newtheorem*{remark*}{Remark}
+\newtheorem*{claim}{Claim}
+
+% --- Left/right header text (to appear on every page) ---
+
+% Include a line underneath the header, no footer line
+\pagestyle{fancy}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Left header text: course name/assignment number
+\lhead{MATH-SHU 238 (HTOP) -- Homework 3}
+
+% Right header text: your name
+\rhead{Yixia Yu (yy5091@nyu.edu)}
+
+% --- Document starts here ---
+
+\begin{document}
+\subsection*{Problem 1}
+A fair coin is tossed repeatedly. Show that the following two statements are equivalent:
+(a) the outcomes of different tosses are independent,\\
+(b) for any given finite sequence of heads and tails, the chance of this sequence occurring in the first m tosses is $2^{-m}$, where m is the length of the sequence.
+\begin{proof}
+
+\begin{itemize}
+  \item (a) $\Rightarrow$ (b):\\
+  Since the coin tosses are independent and fair, for any finite sequence \((x_1, x_2, \dots, x_m)\) where each \(x_i\) is either \(H\) or \(T\), we have
+  \[
+  P(X_1 = x_1,\, X_2 = x_2,\, \dots,\, X_m = x_m)
+  = \prod_{i=1}^m P(X_i = x_i)
+  = \left(\frac{1}{2}\right)^m = 2^{-m}.
+  \]
+
+  \item (b) $\Rightarrow$ (a):\\
+  Consider any finite collection of coin tosses at positions \(i_1, i_2, \ldots, i_m\), with corresponding outcomes \(u_j \in \{H, T\}\) for \(1 \leq j \leq m\).
+  
+  Let \(M = \max\{i_j : 1 \leq j \leq m\}\) be the position of the last toss.
+  
+  For each \(j\), define \(E_j\) to be the set of all possible sequences of length \(M\) where the \(i_j\)-th position shows the outcome \(u_j\).
+  
+  For each \(E_j\), we have fixed exactly one position (the \(i_j\)-th position) to have value \(u_j\), while the other \(M-1\) positions can each be either H or T. Therefore:
+    \[|E_j| = 2^{M-1}\]
+    
+    The intersection \(\bigcap_{j=1}^M E_j\) represents sequences where the \(i_j\)-th position shows \(u_j\) for every \(j\). This means we've fixed exactly \(m\) positions, leaving \(M-m\) positions that can be either H or T. Thus:
+    \[|\bigcap_{j=1}^M E_j| = 2^{M-m}\]
+    
+  Then, we can calculate:
+    \[P(E_j) = \frac{|E_j|}{2^M} = \frac{2^{M-1}}{2^M} = \frac{1}{2}\]
+    
+  Similarly:
+    \[P\left(\bigcap_{j=1}^M E_j\right) = \frac{|\bigcap_{j=1}^M E_j|}{2^M} = \frac{2^{M-m}}{2^M} = \frac{1}{2^m}\]
+    
+  We also know that:
+    \[\prod_{j=1}^M P(E_j) = \prod_{j=1}^M \frac{1}{2} = \left(\frac{1}{2}\right)^m = \frac{1}{2^m}\]
+  
+  Therefore:
+  \[P\left(\bigcap_{j=1}^M E_j\right) = \prod_{j=1}^MP(E_j)\]
+  
+  This equality demonstrates that the events \(E_j\) are mutually independent. Since each \(E_j\) represents "the \(i_j\)-th toss shows outcome \(u_j\)", we have proven that different tosses are independent, regardless of which positions or outcomes we select.
+
+\end{itemize}
+\end{proof}
+\subsection*{Problem 2}
+A symmetric random walk takes place on the integers $0$, $1$, $2$, $\ldots$, $N$ with absorbing barriers at $0$ and $N$, starting at $k$. Show that the probability that the walk is never absorbed is zero.
+\begin{proof}
+  Imagine we continue tracking the theoretical directions of our random walk even after absorption occurs. We consider an infinite sequence of potential steps with probability $\frac{1}{2}$ for each direction.
+
+If a sequence of $N$ consecutive right steps ever occurs, the walker will either reach position $N$ at that point (if not yet absorbed) or would have been absorbed earlier.
+
+We now prove such a sequence must eventually occur with probability 1.
+
+Divide our infinite sequence into disjoint groups of length $N$:
+\begin{align*}
+(s_1, s_2, \ldots, s_N), (s_{N+1}, \ldots, s_{2N}), \ldots
+\end{align*}
+
+Let $s$ denote the specific sequence of $N$ consecutive right steps. For any group, the probability that all steps are to the right is $2^{-N}$.
+
+The probability that $s$ eventually occurs:
+\begin{align*}
+\mathbb{P}(s \text{ occurs eventually}) &\geq \lim_{n \to \infty} \mathbb{P}(s \text{ occurs as one of the first } n \text{ groups}) \\
+&= 1 - \lim_{n \to \infty} (1 - 2^{-N})^n = 1
+\end{align*}
+
+Since $(1-2^{-N})^n \to 0$ as $n \to \infty$, the sequence $s$ must eventually occur with probability 1.
+
+Therefore:
+\begin{align*}
+\mathbb{P}(\text{walker is eventually absorbed}) = 1
+\end{align*}
+
+Thus, the probability that the random walk is never absorbed is 0.
+ \end{proof}
+\subsection*{Problem 3}
+Suppose $(\Omega,\mathscr{F},\mathbb{P})$ is a probability space and $B\in\mathscr{F}$ satisfies $\mathbb{P}(B)>0.$ Let $\mathbb{Q}:\mathscr{F}\to[0,1]$ be defined by $\mathbb{Q}(A)=\mathbb{P}(A\mid B).$ Show that $(\Omega,\mathscr{F},\mathbb{Q})$ is a probability space. If $C\in\mathscr{F}$ and $\mathbb{Q}(C)>0$, show that $\mathbb{Q}(A\mid C)=\mathbb{P}(A\mid B\cap C);$discuss.
+\begin{proof}
+  To show that $(\Omega,\mathscr{F},\mathbb{Q})$ is a probability space:
+  \begin{itemize}
+      \item $\mathbb{Q}(\emptyset) = \mathbb{P}(\emptyset | B) = 0$
+      
+      \item $\mathbb{Q}(\Omega) = \mathbb{P}(\Omega | B) = \frac{\mathbb{P}(B)}{\mathbb{P}(B)} = 1$
+      
+      \item  For disjoint sets $A_1, A_2, \ldots \in \mathscr{F}$, since $ A_i\cap B \in \mathscr{F} $ \\
+      then we have:
+      \begin{align*}
+      \mathbb{Q}\left(\bigcup_{i=1}^{\infty} A_i\right) &= \mathbb{P}\left(\bigcup_{i=1}^{\infty} A_i \mid B\right) \\
+      &= \frac{\mathbb{P}\left(\bigcup_{i=1}^{\infty} (A_i \cap B)\right)}{\mathbb{P}(B)} \\
+      &= \sum_{i=1}^{\infty} \frac{\mathbb{P}(A_i \cap B)}{\mathbb{P}(B)} \\
+      &= \sum_{i=1}^{\infty} \mathbb{Q}(A_i)
+      \end{align*}
+  \end{itemize}
+  
+  Therefore, $(\Omega,\mathscr{F},\mathbb{Q})$ is a probability space.
+  
+  For the second part, given $C\in\mathscr{F}$ with $\mathbb{Q}(C)>0$:
+  \begin{itemize}
+      \item By definition of conditional probability:
+      \begin{align*}
+      \mathbb{Q}(A | C) = \frac{\mathbb{Q}(A \cap C)}{\mathbb{Q}(C)}
+      \end{align*}
+      
+      \item Substituting the definition of $\mathbb{Q}$:
+      \begin{align*}
+      \mathbb{Q}(A | C) &= \frac{\mathbb{P}(A \cap C | B)}{\mathbb{P}(C | B)} \\
+      &= \frac{\mathbb{P}(A \cap C \cap B)/\mathbb{P}(B)}{\mathbb{P}(C \cap B)/\mathbb{P}(B)} \\
+      &= \frac{\mathbb{P}(A \cap B \cap C)}{\mathbb{P}(B \cap C)} \\
+      &= \mathbb{P}(A | B \cap C)
+      \end{align*}
+  \end{itemize}
+     
+\end{proof}
+\subsection*{Problem 4}
+A biased coin is tossed repeatedly. Each time there is a probability $p$ of a head turning up. Let $p_{n}$ be the probability that an even number of heads has occurred after $n$ tosses (zero is an even number). Show that $p_{0}=1$ and that $p_{n}=p(1-p_{n-1})+(1-p)p_{n-1}$ if $n\geq 1$. Solve this difference equation.
+\begin{proof}
+  \begin{itemize}
+    \item For $p_0$: After 0 tosses, we have 0 heads, which is even. Since this is the only possible outcome, $p_0 = 1$.
+    \item For the recurrence relation when $n \geq 1$:
+\\After $n-1$ tosses, we either have an even number of heads (probability $p_{n-1}$) or an odd number (probability $1-p_{n-1}$)
+\\To get an even number after $n$ tosses:
+        \begin{itemize}
+            \item We need a tail on the $n$-th toss if we had an even number before: $p_{n-1} \cdot (1-p)$
+            \item We need a head on the $n$-th toss if we had an odd number before: $(1-p_{n-1}) \cdot p$
+        \end{itemize}
+Therefore: $p_n = p_{n-1}(1-p) + (1-p_{n-1})p = p(1-p_{n-1})+(1-p)p_{n-1}$
+\item To solve this recurrence relation:
+  Since $p_n = p + p_{n-1}(1-2p)$
+        \\Let $q = 1-2p$, so $p_n = p + q \cdot p_{n-1}$
+        \\ Iterating this relation and using $p_0 = 1$:
+        \begin{align*}
+        p_n &= p + q(p + qp_{n-2}) \\
+        &= p + qp + q^2p_{n-2} \\
+        &= \ldots \\
+        &= p(1 + q + q^2 + \ldots + q^{n-1}) + q^n \cdot p_0 \\
+        &= p\frac{1-q^n}{1-q} + q^n
+        \end{align*}
+Substituting $q = 1-2p$ and simplifying:
+        \begin{align*}
+        p_n &= p\frac{1-(1-2p)^n}{2p} + (1-2p)^n \\
+        &= \frac{1-(1-2p)^n}{2} + (1-2p)^n \\
+        &= \frac{1+(1-2p)^n}{2}
+        \end{align*}
+\end{itemize}
+
+Therefore, $p_n = \frac{1+(1-2p)^n}{2}$ is the solution to the given recurrence relation.
+\end{proof}
+\subsection*{Problem 5}
+Loaded dice.
+
+(a) Show that it is not possible to weight two dice in such a way that the sum of the two numbers shown by these loaded dice is equally likely to take any value between 2 and 12 (inclusive).
+
+(b) Given a fair die and a loaded die, show that the sum of their scores, modulo 6, has the same distribution as a fair die, irrespective of the loading.
+\begin{proof}
+(a) We'll prove this by contradiction.
+
+Suppose it's possible to weight two dice such that the sum is equally likely to be any value from 2 to 12. Let $p_i$ be the probability that the first die shows $i$, and $q_j$ be the probability that the second die shows $j$.
+
+For the sum to be equally distributed, we need:
+\begin{align*}
+P(\text{sum} = k) = \frac{1}{11} \quad \forall k \in \{2,3,\ldots,12\}
+\end{align*}
+
+Consider the sums 2 ,7 and 12:
+\begin{align*}
+P(\text{sum} = 2) &= p_1q_1 = \frac{1}{11}\\
+P(\text{sum} = 12) &= p_6q_6 = \frac{1}{11}\\
+P(\text{sum} = 7) &= p_1q_6 + p_2q_5 + p_3q_4 + p_4q_3 + p_5q_2 + p_6q_1 = \frac{1}{11}\end{align*}
+Since  $$p_1q_6+ p_6q_1 \geq 2\sqrt{p_1q_6 p_6q_1 } = \frac{2}{11}$$ because $ p_i,q_i>0 $ \\
+ $\text{So we have  } P(\text{sum} = 7) \geq \frac{2}{11} $, which is a contradiction. 
+ \\Therefore, it is not possible to weight two dice in such a way that the sum of the two numbers shown by these loaded dice is equally likely to take any value between 2 and 12.
+\\(b)Let $X$ be the outcome of the fair die, with $P(X=i) = \frac{1}{6}$ for all $i \in \{1,2,\ldots,6\}$.
+
+Let $Y$ be the outcome of the loaded die, with arbitrary probabilities $P(Y=j) = q_j$ where $\sum_{j=1}^6 q_j = 1$.
+
+We want to show that $(X+Y) \bmod 6$ has a uniform distribution on $\{0,1,2,3,4,5\}$.
+
+For any $k \in \{0,1,2,3,4,5\}$:
+\begin{align*}
+P((X+Y) \bmod 6 = k) &= \sum_{j=1}^6 P(Y=j) \cdot P((X+j) \bmod 6 = k)
+\end{align*}
+
+The key insight is that for any fixed value of $j$, as $X$ varies from 1 to 6, the value $(X+j) \bmod 6$ takes each value in $\{0,1,2,3,4,5\}$ exactly once.
+
+Therefore, $P((X+j) \bmod 6 = k) = \frac{1}{6}$ for all $j$ and $k$, which gives us:
+\begin{align*}
+P((X+Y) \bmod 6 = k) &= \sum_{j=1}^6 P(Y=j) \cdot \frac{1}{6}\\
+&= \frac{1}{6}\sum_{j=1}^6 P(Y=j)\\
+&= \frac{1}{6}
+\end{align*}
+So we have $P((X+Y) \bmod 6 = k) = \frac{1}{6}$ for all $k\in \{0,1,2,3,4,5\}$.
+\\This proves that the distribution of $(X+Y) \bmod 6$ is uniform, regardless of how the loaded die is weighted.
+\end{proof}
+\end{document}
